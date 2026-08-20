@@ -1,0 +1,13 @@
+.env
+# Campaign configurations and scenario files can contain contact and sender data.
+# Keep only the deliberately anonymized root-level templates under version control.
+config/campaigns/**
+!config/campaigns/example-campaign.json
+!config/campaigns/test-campaign.local.json.example
+data/*.db
+data/*.sqlite*
+artifacts/
+vendor/email-campaign-analysis/node_modules/
+__pycache__/
+.pytest_cache/
+.DS_Store

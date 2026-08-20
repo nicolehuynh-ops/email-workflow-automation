@@ -1,0 +1,26 @@
+{
+  "contacts": [
+    {
+      "replyContactId": "contact-1",
+      "email": "alex@northstar.example",
+      "companyKey": "northstar.example",
+      "sequenceStepId": "step-2",
+      "senderEmail": "sender@example.com"
+    },
+    {
+      "replyContactId": "contact-2",
+      "email": "sam@northstar.example",
+      "companyKey": "northstar.example",
+      "sequenceStepId": "step-2",
+      "senderEmail": "sender@example.com"
+    }
+  ],
+  "signals": [
+    {
+      "sourceType": "calendly",
+      "sourceId": "event-1",
+      "outcome": "meeting_booked",
+      "email": "alex@northstar.example"
+    }
+  ]
+}

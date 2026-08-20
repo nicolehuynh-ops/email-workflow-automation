@@ -1,0 +1,28 @@
+{
+  "campaignId": "replace-with-non-production-reply-campaign-id",
+  "slug": "test-campaign",
+  "front": {"inboxIds": ["replace-with-front-inbox-id"], "confirmedInboxId": "replace-with-front-inbox-id", "confirmation": "I confirm this is the only Front inbox the workflow may process for this campaign.", "since": "2026-01-01T00:00:00Z"},
+  "calendly": {"reportStart": "2026-01-01T00:00:00Z", "eventTypeUris": ["https://api.calendly.com/event_types/replace-me"]},
+  "classification": {
+    "confidenceThreshold": 0.8,
+    "gatewayInputScope": {
+      "allowedUnmappedEmails": [],
+      "allowedFrontConversationIds": [],
+      "allowedFrontMessageIds": [],
+      "maxMessagesPerRun": 25
+    }
+  },
+  "sequenceSteps": [
+    {"id": "replace-step-1", "role": "initial", "expectedSender": "sender@example.com", "senderAliases": []},
+    {"id": "replace-step-2", "role": "hold"},
+    {"id": "replace-step-3", "role": "chase", "expectedSender": "sender@example.com", "senderAliases": []},
+    {"id": "replace-step-4", "role": "final_hold"},
+    {"id": "replace-step-5", "role": "final", "expectedSender": "sender@example.com", "senderAliases": []}
+  ],
+  "suppressionPolicy": {
+    "outcomeScopes": {"reply_received": "exact_contact", "meeting_booked": "exact_contact", "event_rsvp": "domain_company"},
+    "domainSuppression": {"domains": ["example.com"]}
+  },
+  "positiveResponseDefinition": ["reply_received", "meeting_booked", "event_rsvp"],
+  "analytics": {"sequence": "Test Campaign - Sender - Version A", "emailVersion": "A"}
+}

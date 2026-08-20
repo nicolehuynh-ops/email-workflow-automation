@@ -1,0 +1,32 @@
+{
+  "campaigns": [
+    {
+      "id": "campaign-slug",
+      "name": "Campaign name",
+      "reportStart": "2026-08-01T00:00:00Z",
+      "sequences": [
+        {
+          "id": "sequence-a",
+          "name": "Sequence A",
+          "bookingLinks": [
+            {
+              "url": "https://calendly.com/your-team/15min?utm_source=replyio&utm_medium=email&utm_campaign=campaign-slug&utm_content=sequence-a"
+            },
+            {
+              "url": "https://calendly.com/your-team/30min?utm_source=replyio&utm_medium=email&utm_campaign=campaign-slug&utm_content=sequence-a-follow-up"
+            }
+          ]
+        },
+        {
+          "id": "sequence-b",
+          "name": "Sequence B",
+          "bookingLinks": [
+            {
+              "url": "https://calendly.com/your-team/15min?utm_source=replyio&utm_medium=email&utm_campaign=campaign-slug&utm_content=sequence-b"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

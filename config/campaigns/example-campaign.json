@@ -1,0 +1,31 @@
+{
+  "campaignId": "replace-with-reply-campaign-id",
+  "slug": "example-campaign",
+  "front": {"inboxIds": [], "since": null},
+  "calendly": {"reportStart": null, "eventTypeUris": []},
+  "classification": {
+    "confidenceThreshold": 0.8,
+    "gatewayInputScope": {
+      "allowedUnmappedEmails": [],
+      "allowedFrontConversationIds": [],
+      "allowedFrontMessageIds": [],
+      "maxMessagesPerRun": 50
+    }
+  },
+  "sequenceSteps": [
+    {"id": "step-1", "role": "initial", "expectedSender": "sender@example.com", "senderAliases": []},
+    {"id": "step-2", "role": "hold"},
+    {"id": "step-3", "role": "chase", "expectedSender": "sender@example.com", "senderAliases": []},
+    {"id": "step-4", "role": "final_hold"},
+    {"id": "step-5", "role": "final", "expectedSender": "sender@example.com", "senderAliases": []}
+  ],
+  "suppressionPolicy": {
+    "outcomeScopes": {
+      "reply_received": "exact_contact",
+      "meeting_booked": "exact_contact",
+      "event_rsvp": "domain_company"
+    },
+    "domainSuppression": {"domains": ["northstar.example"]}
+  },
+  "positiveResponseDefinition": ["reply_received", "meeting_booked", "event_rsvp"]
+}

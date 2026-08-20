@@ -1,0 +1,13 @@
+services:
+  outreach:
+    build:
+      context: .
+    image: email-outreach-workflow:local
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+      - ./config/campaigns:/app/config/campaigns:ro
+      - ./fixtures:/app/fixtures:ro

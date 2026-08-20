@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Threaded Chase Email Experiment</title>
+  <style>
+    :root {
+      --page: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #202124;
+      --muted: #5f6368;
+      --line: #dadce0;
+      --quote-line: #d0d7de;
+      --accent: #0b57d0;
+      --code-bg: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(320px, 440px) minmax(420px, 760px);
+      gap: 24px;
+      width: min(1240px, calc(100vw - 32px));
+      margin: 24px auto;
+      align-items: start;
+    }
+
+    .panel,
+    .preview-shell {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .panel {
+      padding: 18px;
+      position: sticky;
+      top: 16px;
+    }
+
+    .panel h1 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .panel p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      color: #3c4043;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      color: var(--ink);
+      font: 14px/1.4 Arial, Helvetica, sans-serif;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 124px;
+    }
+
+    .small-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .preview-shell {
+      overflow: hidden;
+    }
+
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 48px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+    }
+
+    .subject {
+      min-width: 0;
+      font-size: 18px;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .client-label {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .email-frame {
+      background: #ffffff;
+      padding: 0;
+    }
+
+    .message {
+      padding: 18px 22px 22px;
+    }
+
+    .message-header {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #174ea6;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .sender {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .sender span,
+    .meta,
+    .to-line {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .body {
+      max-width: 640px;
+      margin-left: 52px;
+      color: #1f1f1f;
+      font-size: 14px;
+    }
+
+    .body p {
+      margin: 0 0 14px;
+    }
+
+    .signature {
+      margin-top: 18px;
+    }
+
+    .thread-divider {
+      margin: 18px 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .quoted-message {
+      margin-top: 6px;
+      padding-left: 12px;
+      border-left: 1px solid var(--quote-line);
+      color: #3c4043;
+    }
+
+    .quoted-message .quoted-header {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .html-output {
+      margin-top: 16px;
+    }
+
+    .html-output textarea {
+      min-height: 170px;
+      background: var(--code-bg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        position: static;
+      }
+
+      .body {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="panel" aria-label="Experiment controls">
+      <h1>Threaded Chase Experiment</h1>
+      <p>Paste the Reply.io HTML for the chase and initial emails. The preview renders that HTML directly so signature blocks stay part of the body.</p>
+
+      <label for="subjectInput">Subject</label>
+      <input id="subjectInput" value="Re: Opportunity to connect">
+
+      <div class="small-row">
+        <div>
+          <label for="chaseSenderInput">Chase sender</label>
+          <input id="chaseSenderInput" value="Prab">
+        </div>
+        <div>
+          <label for="chaseEmailInput">Chase email</label>
+          <input id="chaseEmailInput" value="sender@example.com">
+        </div>
+      </div>
+
+      <label for="recipientInput">Recipient</label>
+      <input id="recipientInput" value="{{firstName}} {{lastName}}">
+
+      <label for="sentAtInput">Original sent timestamp</label>
+      <input id="sentAtInput" value="Tue, Jul 21, 2026 at 9:14 AM">
+
+      <label for="chaseCopyInput">Chase email HTML</label>
+      <textarea id="chaseCopyInput">&lt;div&gt;Hi {{firstName}},&lt;/div&gt;
+&lt;div&gt;&lt;br&gt;&lt;/div&gt;
+&lt;div&gt;Wanted to float this back to the top of your inbox.&lt;/div&gt;
+&lt;div&gt;&lt;br&gt;&lt;/div&gt;
+&lt;div&gt;Would it be worth connecting this week?&lt;/div&gt;
+&lt;div&gt;&lt;br&gt;&lt;/div&gt;
+&lt;div&gt;Best,&lt;/div&gt;
+&lt;div&gt;Prab&lt;/div&gt;</textarea>
+
+      <label for="initialCopyInput">Initial email HTML</label>
+      <textarea id="initialCopyInput">&lt;div&gt;Hi {{firstName}},&lt;/div&gt;
+&lt;div&gt;&lt;br&gt;&lt;/div&gt;
+&lt;div&gt;Paste the exact initial email HTML here, including the signature block that Reply.io will send.&lt;/div&gt;
+&lt;div&gt;&lt;br&gt;&lt;/div&gt;
+&lt;div&gt;Best,&lt;/div&gt;
+&lt;div&gt;Prab&lt;/div&gt;</textarea>
+
+      <div class="html-output">
+        <label for="replyHtmlOutput">Reply.io HTML body draft</label>
+        <textarea id="replyHtmlOutput" readonly></textarea>
+      </div>
+    </section>
+
+    <section class="preview-shell" aria-label="Email preview">
+      <div class="preview-toolbar">
+        <div class="subject" id="subjectPreview"></div>
+        <div class="client-label">Inbox preview</div>
+      </div>
+
+      <article class="email-frame">
+        <div class="message">
+          <header class="message-header">
+            <div class="avatar">P</div>
+            <div>
+              <div class="sender"><span id="chaseSenderPreview"></span> <span>&lt;<span id="chaseEmailPreview"></span>&gt;</span></div>
+              <div class="to-line">to <span id="recipientPreview"></span></div>
+            </div>
+            <div class="meta">now</div>
+          </header>
+
+          <div class="body">
+            <div id="chaseBodyPreview"></div>
+
+            <div class="thread-divider" id="threadDividerPreview"></div>
+
+            <div class="quoted-message">
+              <p class="quoted-header" id="quotedHeaderPreview"></p>
+              <div id="initialBodyPreview"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const fields = {
+      subject: document.getElementById("subjectInput"),
+      chaseSender: document.getElementById("chaseSenderInput"),
+      chaseEmail: document.getElementById("chaseEmailInput"),
+      recipient: document.getElementById("recipientInput"),
+      sentAt: document.getElementById("sentAtInput"),
+      chaseCopy: document.getElementById("chaseCopyInput"),
+      initialCopy: document.getElementById("initialCopyInput")
+    };
+
+    const preview = {
+      subject: document.getElementById("subjectPreview"),
+      chaseSender: document.getElementById("chaseSenderPreview"),
+      chaseEmail: document.getElementById("chaseEmailPreview"),
+      recipient: document.getElementById("recipientPreview"),
+      chaseBody: document.getElementById("chaseBodyPreview"),
+      threadDivider: document.getElementById("threadDividerPreview"),
+      quotedHeader: document.getElementById("quotedHeaderPreview"),
+      initialBody: document.getElementById("initialBodyPreview"),
+      output: document.getElementById("replyHtmlOutput")
+    };
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderReplyHtml(values) {
+      return [
+        values.chaseCopy,
+        `<div style="margin:18px 0 14px;color:#5f6368;font:13px Arial,Helvetica,sans-serif;">---------- Forwarded message ---------</div>`,
+        `<div style="border-left:1px solid #d0d7de;margin-top:6px;padding-left:12px;color:#3c4043;font:14px Arial,Helvetica,sans-serif;">`,
+        `<p style="margin:0 0 12px;color:#5f6368;font-size:13px;">On ${escapeHtml(values.sentAt)}, ${escapeHtml(values.chaseSender)} &lt;${escapeHtml(values.chaseEmail)}&gt; wrote:</p>`,
+        values.initialCopy,
+        `</div>`
+      ].join("\n");
+    }
+
+    function update() {
+      const values = Object.fromEntries(
+        Object.entries(fields).map(([key, field]) => [key, field.value])
+      );
+      const replyHtml = renderReplyHtml(values);
+
+      preview.subject.textContent = values.subject;
+      preview.chaseSender.textContent = values.chaseSender;
+      preview.chaseEmail.textContent = values.chaseEmail;
+      preview.recipient.textContent = values.recipient;
+      preview.chaseBody.innerHTML = values.chaseCopy;
+      preview.threadDivider.textContent = "---------- Forwarded message ---------";
+      preview.quotedHeader.textContent = `On ${values.sentAt}, ${values.chaseSender} <${values.chaseEmail}> wrote:`;
+      preview.initialBody.innerHTML = values.initialCopy;
+      preview.output.value = replyHtml;
+    }
+
+    Object.values(fields).forEach((field) => field.addEventListener("input", update));
+    update();
+  </script>
+</body>
+</html>

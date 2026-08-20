@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+node_modules/
+runs/
+campaigns/*/runs/
+campaigns/*/responses/
+campaigns/*/config/*.csv
+campaigns/*/suppression/*.csv
+configs/*.csv
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+import fs from "node:fs/promises";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
+
+const [inputPath, outputPath] = process.argv.slice(2);
+if (!inputPath || !outputPath || !process.env.ARTIFACT_TOOL_NODE_MODULES) throw new Error("Usage requires input/output paths and ARTIFACT_TOOL_NODE_MODULES.");
+const require = createRequire(import.meta.url);
+const artifactTool = await import(pathToFileURL(require.resolve("@oai/artifact-tool", { paths: [process.env.ARTIFACT_TOOL_NODE_MODULES] })).href);
+const { Workbook, SpreadsheetFile } = artifactTool;
+const rows = JSON.parse(await fs.readFile(inputPath, "utf8"));
+const headers = ["Issuer Name", "Domain", "PCS Sender", "Email Version", "Response", "Contact Email", "Outcome Type", "Source", "Evidence ID"];
+const workbook = Workbook.create();
+const sheet = workbook.worksheets.add("Positive Responses");
+sheet.showGridLines = false;
+sheet.getRange(`A1:I${Math.max(1, rows.length + 1)}`).values = [headers, ...rows.map(row => headers.map(header => row[header] ?? ""))];
+sheet.getRange("A1:I1").format = { fill: "#14324A", font: { bold: true, color: "#FFFFFF" }, wrapText: true };
+sheet.getRange(`A1:I${Math.max(1, rows.length + 1)}`).format.autofitColumns();
+sheet.getRange("A:A").format.columnWidth = 22;
+sheet.getRange("B:B").format.columnWidth = 22;
+sheet.getRange("C:C").format.columnWidth = 22;
+sheet.getRange("D:D").format.columnWidth = 24;
+sheet.getRange("E:E").format.columnWidth = 24;
+sheet.getRange("F:F").format.columnWidth = 28;
+sheet.getRange("G:I").format.columnWidth = 18;
+sheet.freezePanes.freezeRows(1);
+const exported = await SpreadsheetFile.exportXlsx(workbook);
+await exported.save(outputPath);
+const scan = await workbook.inspect({ kind: "match", searchTerm: "#REF!|#DIV/0!|#VALUE!|#NAME\\?|#N/A", options: { useRegex: true, maxResults: 20 } });
+console.log(scan.ndjson);

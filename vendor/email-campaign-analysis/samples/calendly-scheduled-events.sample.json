@@ -1,0 +1,42 @@
+{
+  "generatedFrom": "Calendly GET /scheduled_events response (sanitized)",
+  "redactedFields": [
+    "uri",
+    "cancel_url",
+    "reschedule_url",
+    "event_guests",
+    "invitee names",
+    "invitee emails",
+    "user identifiers"
+  ],
+  "collection": [
+    {
+      "name": "15 Minute Meeting",
+      "status": "active",
+      "start_time": "2026-08-13T23:45:00.000000Z",
+      "end_time": "2026-08-14T00:00:00.000000Z",
+      "event_type": "https://api.calendly.com/event_types/\u2026",
+      "location": {
+        "data": {
+          "settings": null,
+          "extra": null
+        },
+        "join_url": null,
+        "status": "failed",
+        "type": "zoom"
+      },
+      "created_at": "2026-08-12T23:02:36.339412Z",
+      "updated_at": "2026-08-12T23:02:56.107952Z",
+      "event_memberships": [
+        {
+          "user_name": "REDACTED",
+          "user_email": "REDACTED"
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "next_page": null,
+    "previous_page": null
+  }
+}

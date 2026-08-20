@@ -1,0 +1,7 @@
+.DS_Store
+.env
+booking-links.json
+node_modules
+
+# Campaign data, configuration, and generated reports are local-only.
+campaigns/*/

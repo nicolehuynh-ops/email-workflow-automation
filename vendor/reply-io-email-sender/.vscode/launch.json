@@ -1,0 +1,66 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Multi-sender: Configure campaign",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/multi_sender/configure_campaign.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Single-chase: Configure campaign",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/single_chase/configure_campaign.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Single-chase: Prep + send",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/single_chase/prep_send.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Multi-sender: Chase 1 prep + send",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/multi_sender/chase_1_prep_send.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Multi-sender: Chase 2 prep",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/multi_sender/chase_2_prep.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Multi-sender: Chase 2 send",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/multi_sender/chase_2_send.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Zapier finish issuer",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/zapier_finish_issuer.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "env": {
+        "REPLY_CONTACT_EMAIL": "",
+        "REPLY_CONTACT_ID": "",
+        "PCS_ISSUER_ID": ""
+      }
+    }
+  ]
+}
